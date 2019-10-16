@@ -667,38 +667,47 @@ static CGFloat itemMargin = 5;
 
 // 调用相机
 - (void)pushImagePickerController {
-    // 提前定位
+
     TZImagePickerController *tzImagePickerVc = (TZImagePickerController *)self.navigationController;
-    if (tzImagePickerVc.allowCameraLocation) {
-        __weak typeof(self) weakSelf = self;
-        [[TZLocationManager manager] startLocationWithSuccessBlock:^(NSArray<CLLocation *> *locations) {
-            __strong typeof(weakSelf) strongSelf = weakSelf;
-            strongSelf.location = [locations firstObject];
-        } failureBlock:^(NSError *error) {
-            __strong typeof(weakSelf) strongSelf = weakSelf;
-            strongSelf.location = nil;
-        }];
+
+//    - (void)imagePickerController:(TZImagePickerController *)picker allowTakePhoto:(BOOL)allowTakePhoto allowTakeVideo:(BOOL)allowTakeVideo;
+
+    if ([tzImagePickerVc.pickerDelegate respondsToSelector:@selector(imagePickerController:allowTakePhoto:allowTakeVideo:)]) {
+        [tzImagePickerVc.pickerDelegate imagePickerController:tzImagePickerVc allowTakePhoto:tzImagePickerVc.allowTakePicture allowTakeVideo:tzImagePickerVc.allowTakeVideo];
     }
-    
-    UIImagePickerControllerSourceType sourceType = UIImagePickerControllerSourceTypeCamera;
-    if ([UIImagePickerController isSourceTypeAvailable: sourceType]) {
-        self.imagePickerVc.sourceType = sourceType;
-        NSMutableArray *mediaTypes = [NSMutableArray array];
-        if (tzImagePickerVc.allowTakePicture) {
-            [mediaTypes addObject:(NSString *)kUTTypeImage];
-        }
-        if (tzImagePickerVc.allowTakeVideo) {
-            [mediaTypes addObject:(NSString *)kUTTypeMovie];
-            self.imagePickerVc.videoMaximumDuration = tzImagePickerVc.videoMaximumDuration;
-        }
-        self.imagePickerVc.mediaTypes= mediaTypes;
-        if (tzImagePickerVc.uiImagePickerControllerSettingBlock) {
-            tzImagePickerVc.uiImagePickerControllerSettingBlock(_imagePickerVc);
-        }
-        [self presentViewController:_imagePickerVc animated:YES completion:nil];
-    } else {
-        NSLog(@"模拟器中无法打开照相机,请在真机中使用");
-    }
+
+    // 提前定位
+
+//    if (tzImagePickerVc.allowCameraLocation) {
+//        __weak typeof(self) weakSelf = self;
+//        [[TZLocationManager manager] startLocationWithSuccessBlock:^(NSArray<CLLocation *> *locations) {
+//            __strong typeof(weakSelf) strongSelf = weakSelf;
+//            strongSelf.location = [locations firstObject];
+//        } failureBlock:^(NSError *error) {
+//            __strong typeof(weakSelf) strongSelf = weakSelf;
+//            strongSelf.location = nil;
+//        }];
+//    }
+//
+//    UIImagePickerControllerSourceType sourceType = UIImagePickerControllerSourceTypeCamera;
+//    if ([UIImagePickerController isSourceTypeAvailable: sourceType]) {
+//        self.imagePickerVc.sourceType = sourceType;
+//        NSMutableArray *mediaTypes = [NSMutableArray array];
+//        if (tzImagePickerVc.allowTakePicture) {
+//            [mediaTypes addObject:(NSString *)kUTTypeImage];
+//        }
+//        if (tzImagePickerVc.allowTakeVideo) {
+//            [mediaTypes addObject:(NSString *)kUTTypeMovie];
+//            self.imagePickerVc.videoMaximumDuration = tzImagePickerVc.videoMaximumDuration;
+//        }
+//        self.imagePickerVc.mediaTypes= mediaTypes;
+//        if (tzImagePickerVc.uiImagePickerControllerSettingBlock) {
+//            tzImagePickerVc.uiImagePickerControllerSettingBlock(_imagePickerVc);
+//        }
+//        [self presentViewController:_imagePickerVc animated:YES completion:nil];
+//    } else {
+//        NSLog(@"模拟器中无法打开照相机,请在真机中使用");
+//    }
 }
 
 - (void)refreshBottomToolBarStatus {

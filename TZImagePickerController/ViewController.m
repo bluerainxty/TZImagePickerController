@@ -583,6 +583,12 @@
     }
 }
 
+
+- (void)imagePickerController:(TZImagePickerController *)picker allowTakePhoto:(BOOL)allowTakePhoto allowTakeVideo:(BOOL)allowTakeVideo {
+
+    
+}
+
 // If user picking a video and allowPickingMultipleVideo is NO, this callback will be called.
 // If allowPickingMultipleVideo is YES, will call imagePickerController:didFinishPickingPhotos:sourceAssets:isSelectOriginalPhoto:
 // 如果用户选择了一个视频且allowPickingMultipleVideo是NO，下面的代理方法会被执行
